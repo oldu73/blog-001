@@ -3,36 +3,44 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: {
-    main: path.join(__dirname, "src/index.js")
+    main: path.join(__dirname, "src/index.js"),
+    form: path.join(__dirname, "src/form/form.js"),
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "[name].bundle.js"
+    filename: "[name].bundle.js",
   },
   module: {
     rules: [
       {
         test: /\.js/,
         exclude: /(node_modules)/,
-        use: ["babel-loader"]
+        use: ["babel-loader"],
       },
       {
         test: /\.scss$/i,
-        use: ["style-loader", "css-loader", "sass-loader"]
-      }
-    ]
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "./src/index.html")
-    })
+      filename: "index.html",
+      template: path.join(__dirname, "./src/index.html"),
+      chunks: ["main"]
+    }),
+    new HtmlWebpackPlugin({
+      filename: "form.html",
+      template: path.join(__dirname, "./src/form/form.html"),
+      chunks: ["form"]
+    }),
   ],
   stats: "minimal",
   devtool: "source-map",
   mode: "development",
   devServer: {
     open: false,
-    static: path.resolve(__dirname, './dist'),
-    port: 4000
-  }
+    static: path.resolve(__dirname, "./dist"),
+    port: 4000,
+  },
 };
