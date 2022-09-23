@@ -32,7 +32,6 @@ module.exports = {
       patterns: [
         {
           from: "./src/assets/images/*",
-          // to: "assets/images",
           to:path.resolve(__dirname, 'dist','assets/images', '[name][ext]'),
         },
       ],
