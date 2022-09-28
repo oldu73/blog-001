@@ -7,13 +7,26 @@ const form = document.querySelector("form");
 const errorElement = document.querySelector("#errors");
 let errors = [];
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const formData = new FormData(form);
   const article = Object.fromEntries(formData.entries());
-  if (formIsValid(article)) {
-    const json = JSON.stringify(article);
-    // fetch
+  try {
+    if (formIsValid(article)) {
+      const json = JSON.stringify(article);
+      // articles collection followed by uuid to have only "my" collection at restapi.fr
+      const response = await fetch("https://restapi.fr/api/articles-66962a0a-ca08-421b-9244-d32bf133f8da", {
+        method: "POST",
+        body: json,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const body = await response.json();
+      console.log(body);
+    }
+  } catch (e) {
+    console.error("e: ", e);
   }
 });
 
