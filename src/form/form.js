@@ -32,7 +32,7 @@ form.addEventListener("submit", async (event) => {
 
 const formIsValid = (article) => {
   errors = [];
-  if (!article.author || !article.category || !article.content) {
+  if (!article.author || !article.category || !article.content || !article.img || !article.title) {
     errors.push("All fields must be filled!");
   }
   if (article.content.length < 20) {
