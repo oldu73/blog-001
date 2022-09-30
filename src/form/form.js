@@ -14,14 +14,16 @@ form.addEventListener("submit", async (event) => {
   try {
     if (formIsValid(article)) {
       const json = JSON.stringify(article);
-      // articles collection followed by uuid to have only "my" collection at restapi.fr
-      const response = await fetch("https://restapi.fr/api/articles-66962a0a-ca08-421b-9244-d32bf133f8da", {
-        method: "POST",
-        body: json,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://restapi.fr/api/article",
+        {
+          method: "POST",
+          body: json,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const body = await response.json();
       console.log(body);
     }
@@ -32,7 +34,13 @@ form.addEventListener("submit", async (event) => {
 
 const formIsValid = (article) => {
   errors = [];
-  if (!article.author || !article.category || !article.content || !article.img || !article.title) {
+  if (
+    !article.author ||
+    !article.category ||
+    !article.content ||
+    !article.img ||
+    !article.title
+  ) {
     errors.push("All fields must be filled!");
   }
   if (article.content.length < 20) {
