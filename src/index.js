@@ -1,3 +1,4 @@
+import { async } from "regenerator-runtime";
 import "./assets/styles/styles.scss";
 import "./index.scss";
 
@@ -27,12 +28,41 @@ const createArticles = (articles) => {
   });
   articleContainerElement.innerHTML = "";
   articleContainerElement.append(...articlesDOM);
+  const deleteButtons = articleContainerElement.querySelectorAll(".btn-delete");
+  console.log(deleteButtons);
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      try {
+        const target = event.target;
+        const articleId = target.dataset.id;
+        console.log(articleId);
+        const response = await fetch(
+          `https://restapi.fr/api/article/${articleId}`,
+          {
+            method: "DELETE",
+          }
+        );
+        const body = await response.json();
+        console.log(body);
+        fetchArticle();
+      } catch (e) {
+        console.log("e: ", e);
+      }
+    });
+  });
 };
 
 const fetchArticle = async () => {
   try {
     const response = await fetch("https://restapi.fr/api/article");
-    const articles = await response.json();
+    let articles = await response.json();
+    console.log(articles);
+    // Standard api behavior return not an array if only one element
+    // so below code convert it (one element) into an array
+    // otherwise it cause an error when 'map' method (to create articles) will be called on it.
+    if (!Array.isArray(articles)) {
+      articles = [articles];
+    }
     createArticles(articles);
   } catch (e) {
     console.log("e : ", e);
