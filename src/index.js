@@ -21,7 +21,7 @@ const createArticles = (articles) => {
   ${article.content}
 </p>
 <div class="article-actions">
-  <button class="btn btn-delete" data-id=${article._id} >Delete</button>
+  <button class="btn btn-delete" data-id=${article.id} >Delete</button>
 </div>
 `;
     return articleDOM;
@@ -54,8 +54,14 @@ const createArticles = (articles) => {
 
 const fetchArticle = async () => {
   try {
-    const response = await fetch("https://restapi.fr/api/article");
-    let articles = await response.json();
+    const response = await fetch(
+      `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
+      {
+        method: "GET",
+      }
+    );
+    let content = await response.json();
+    let articles = content.body.Items;
     console.log(articles);
     // Standard api behavior return not an array if only one element
     // so below code convert it (one element) into an array
