@@ -36,12 +36,14 @@ const createArticles = (articles) => {
         const target = event.target;
         const articleId = target.dataset.id;
         console.log(articleId);
-        const response = await fetch(
-          `https://restapi.fr/api/article/${articleId}`,
+        const response = await fetch(`https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
           {
             method: "DELETE",
-          }
-        );
+            body: `{"id" : "${articleId}"}`,
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
         const body = await response.json();
         console.log(body);
         fetchArticle();
