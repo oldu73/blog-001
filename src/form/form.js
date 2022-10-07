@@ -15,7 +15,7 @@ form.addEventListener("submit", async (event) => {
     if (formIsValid(article)) {
       const json = JSON.stringify(article);
       const response = await fetch(
-        "https://restapi.fr/api/article",
+        "https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev",
         {
           method: "POST",
           body: json,
