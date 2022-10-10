@@ -35,15 +35,20 @@ const createArticles = (articles) => {
       try {
         const target = event.target;
         const articleId = target.dataset.id;
-        console.log(articleId);
-        const response = await fetch(`https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
+        const articleToDelete = new Object();
+        articleToDelete.id = articleId;
+        const json = JSON.stringify(articleToDelete);
+        console.log(json);
+        const response = await fetch(
+          `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
           {
             method: "DELETE",
-            body: `{"id" : "${articleId}"}`,
+            body: json,
             headers: {
               "Content-Type": "application/json",
-            }
-          });
+            },
+          }
+        );
         const body = await response.json();
         console.log(body);
         fetchArticle();
