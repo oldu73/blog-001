@@ -5,7 +5,12 @@ console.log("form.js");
 
 const form = document.querySelector("form");
 const errorElement = document.querySelector("#errors");
+const btnCancel = document.querySelector(".btn-secondary");
 let errors = [];
+
+btnCancel.addEventListener("click", () => {
+  location.assign("/index.html");
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -24,8 +29,9 @@ form.addEventListener("submit", async (event) => {
           },
         }
       );
-      const body = await response.json();
-      console.log(body);
+      if (response.status < 299) {
+        location.assign("/index.html");
+      }
     }
   } catch (e) {
     console.error("e: ", e);
