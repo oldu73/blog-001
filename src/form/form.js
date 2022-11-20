@@ -1,3 +1,4 @@
+import { async } from "regenerator-runtime";
 import "../assets/styles/styles.scss";
 import "./form.scss";
 
@@ -7,6 +8,24 @@ const form = document.querySelector("form");
 const errorElement = document.querySelector("#errors");
 const btnCancel = document.querySelector(".btn-secondary");
 let errors = [];
+
+const initForm = async () => {
+  const params = new URL(location.href);
+  const articleId = params.searchParams.get("id");
+  console.log("articleId: ", articleId);
+
+  if (articleId) {
+    const response = await fetch(
+      `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev/article?id=${articleId}`
+    );
+    if (response.status < 300) {
+      const article = await response.json();
+      console.log(article);
+    }
+  }
+};
+
+initForm();
 
 btnCancel.addEventListener("click", () => {
   location.assign("/index.html");

@@ -16,17 +16,20 @@ const createArticles = (articles) => {
   alt="profile"
 />
 <h2>${article.title}</h2>
-<p class="article-author">${article.author} - ${(new Date(article.createdAt)).toLocaleDateString("fr-CH", {
-  weekday: 'long',
-  day: '2-digit',
-  month: 'long',
-  year: 'numeric'
-})}</p>
+<p class="article-author">${article.author} - ${new Date(
+      article.createdAt
+    ).toLocaleDateString("fr-CH", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    })}</p>
 <p class="article-content">
   ${article.content}
 </p>
 <div class="article-actions">
   <button class="btn btn-delete" data-id=${article.id} >Delete</button>
+  <button class="btn btn-primary" data-id=${article.id} >Edit</button>
 </div>
 `;
     return articleDOM;
@@ -34,7 +37,14 @@ const createArticles = (articles) => {
   articleContainerElement.innerHTML = "";
   articleContainerElement.append(...articlesDOM);
   const deleteButtons = articleContainerElement.querySelectorAll(".btn-delete");
-  console.log(deleteButtons);
+  const editButtons = articleContainerElement.querySelectorAll(".btn-primary");
+  editButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      const target = event.target;
+      const articleId = target.dataset.id;
+      location.assign(`/form.html?id=${articleId}`);
+    });
+  });
   deleteButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
       try {
