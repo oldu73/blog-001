@@ -7,11 +7,25 @@ console.log("form.js");
 const form = document.querySelector("form");
 const errorElement = document.querySelector("#errors");
 const btnCancel = document.querySelector(".btn-secondary");
+let articleId;
 let errors = [];
+
+const fillForm = (article) => {
+  const author = document.querySelector('input[name="author"]');
+  const img = document.querySelector('input[name="img"]');
+  const category = document.querySelector('input[name="category"]');
+  const title = document.querySelector('input[name="title"]');
+  const content = document.querySelector("textarea");
+  author.value = article.Item.author || "";
+  img.value = article.Item.img || "";
+  category.value = article.Item.category || "";
+  title.value = article.Item.title || "";
+  content.value = article.Item.content || "";
+};
 
 const initForm = async () => {
   const params = new URL(location.href);
-  const articleId = params.searchParams.get("id");
+  articleId = params.searchParams.get("id");
   console.log("articleId: ", articleId);
 
   if (articleId) {
@@ -20,7 +34,8 @@ const initForm = async () => {
     );
     if (response.status < 300) {
       const article = await response.json();
-      console.log(article);
+      console.log("article", article);
+      fillForm(article);
     }
   }
 };
@@ -38,16 +53,30 @@ form.addEventListener("submit", async (event) => {
   try {
     if (formIsValid(article)) {
       const json = JSON.stringify(article);
-      const response = await fetch(
-        "https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev",
-        {
-          method: "POST",
-          body: json,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      let response;
+      if (articleId) {
+        response = await fetch(
+          `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev/article?id=${articleId}`,
+          {
+            method: "PATCH",
+            body: json,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } else {
+        response = await fetch(
+          "https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev",
+          {
+            method: "POST",
+            body: json,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
       if (response.status < 299) {
         location.assign("/index.html");
       }
