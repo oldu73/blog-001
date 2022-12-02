@@ -5,6 +5,7 @@ import "./index.scss";
 console.log("index.js");
 
 const articleContainerElement = document.querySelector(".articles-container");
+const categoriesContainerElement = document.querySelector(".categories");
 
 const createArticles = (articles) => {
   const articlesDOM = articles.map((article) => {
@@ -53,7 +54,6 @@ const createArticles = (articles) => {
         const articleToDelete = new Object();
         articleToDelete.id = articleId;
         const json = JSON.stringify(articleToDelete);
-        console.log(json);
         const response = await fetch(
           `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
           {
@@ -65,13 +65,38 @@ const createArticles = (articles) => {
           }
         );
         const body = await response.json();
-        console.log(body);
         fetchArticle();
       } catch (e) {
         console.log("e: ", e);
       }
     });
   });
+};
+
+const displayMenuCategories = (categoriesArr) => {
+  const liElements = categoriesArr.map((categoryElem) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<li>${categoryElem[0]} ( <strong>${categoryElem[1]}</strong> )</li>`;
+    return li;
+  });
+  categoriesContainerElement.innerHTML = "";
+  categoriesContainerElement.append(...liElements);
+};
+
+const createMenuCategories = (articles) => {
+  const categories = articles.reduce((acc, article) => {
+    if (acc[article.category]) {
+      acc[article.category]++;
+    } else {
+      acc[article.category] = 1;
+    }
+    return acc;
+  }, {});
+
+  const categoriesArr = Object.keys(categories).map((category) => {
+    return [category, categories[category]];
+  });
+  displayMenuCategories(categoriesArr);
 };
 
 const fetchArticle = async () => {
@@ -84,7 +109,6 @@ const fetchArticle = async () => {
     );
     let content = await response.json();
     let articles = content.body.Items;
-    console.log(articles);
     // Standard api behavior return not an array if only one element
     // so below code convert it (one element) into an array
     // otherwise it cause an error when 'map' method (to create articles) will be called on it.
@@ -92,6 +116,7 @@ const fetchArticle = async () => {
       articles = [articles];
     }
     createArticles(articles);
+    createMenuCategories(articles);
   } catch (e) {
     console.log("e : ", e);
   }
