@@ -6,8 +6,15 @@ console.log("index.js");
 
 const articleContainerElement = document.querySelector(".articles-container");
 const categoriesContainerElement = document.querySelector(".categories");
+const selectElement = document.querySelector("select");
 let filter;
 let articles;
+let sortBy = "desc";
+
+selectElement.addEventListener("change", () => {
+  sortBy = selectElement.value;
+  fetchArticle();
+});
 
 const createArticles = () => {
   const articlesDOM = articles
@@ -86,7 +93,10 @@ const createArticles = () => {
 const displayMenuCategories = (categoriesArr) => {
   const liElements = categoriesArr.map((categoryElem) => {
     const li = document.createElement("li");
-    li.innerHTML = `<li>${categoryElem[0]} ( <strong>${categoryElem[1]}</strong> )</li>`;
+    li.innerHTML = `${categoryElem[0]} ( <strong>${categoryElem[1]}</strong> )`;
+    if (categoryElem[0] === filter) {
+      li.classList.add("active");
+    }
     li.addEventListener("click", () => {
       if (filter === categoryElem[0]) {
         filter = null;
@@ -127,13 +137,14 @@ const createMenuCategories = () => {
 const fetchArticle = async () => {
   try {
     const response = await fetch(
-      `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
+      `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev/articles/${sortBy}/`,
       {
         method: "GET",
       }
     );
     let content = await response.json();
-    articles = content.body.Items;
+    // articles = content.body.Items;
+    articles = content.body;
     // Standard api behavior return not an array if only one element
     // so below code convert it (one element) into an array
     // otherwise it cause an error when 'map' method (to create articles) will be called on it.
