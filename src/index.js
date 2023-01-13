@@ -66,30 +66,32 @@ const createArticles = () => {
   });
   deleteButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
-      openModal("Are you sure you want to delete your article?");
-      // if (result === true) {
-      //   try {
-      //     const target = event.target;
-      //     const articleId = target.dataset.id;
-      //     const articleToDelete = new Object();
-      //     articleToDelete.id = articleId;
-      //     const json = JSON.stringify(articleToDelete);
-      //     const response = await fetch(
-      //       `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
-      //       {
-      //         method: "DELETE",
-      //         body: json,
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     const body = await response.json();
-      //     fetchArticle();
-      //   } catch (e) {
-      //     console.log("e: ", e);
-      //   }
-      // }
+      const result = await openModal(
+        "Are you sure you want to delete your article?"
+      );
+      if (result === true) {
+        try {
+          const target = event.target;
+          const articleId = target.dataset.id;
+          const articleToDelete = new Object();
+          articleToDelete.id = articleId;
+          const json = JSON.stringify(articleToDelete);
+          const response = await fetch(
+            `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
+            {
+              method: "DELETE",
+              body: json,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const body = await response.json();
+          fetchArticle();
+        } catch (e) {
+          console.log("e: ", e);
+        }
+      }
     });
   });
 };

@@ -1,6 +1,7 @@
 import { async } from "regenerator-runtime";
 import "../assets/styles/styles.scss";
 import "./form.scss";
+import { openModal } from "../assets/javascripts/modal";
 
 console.log("form.js");
 
@@ -42,8 +43,14 @@ const initForm = async () => {
 
 initForm();
 
-btnCancel.addEventListener("click", () => {
-  location.assign("/index.html");
+btnCancel.addEventListener("click", async () => {
+  const result = await openModal(
+    "If you leave the page, you will lose your article"
+  );
+
+  if (result) {
+    location.assign("/index.html");
+  }
 });
 
 form.addEventListener("submit", async (event) => {
