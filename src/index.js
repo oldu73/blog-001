@@ -1,6 +1,7 @@
 import { async } from "regenerator-runtime";
 import "./assets/styles/styles.scss";
 import "./index.scss";
+import { openModal } from "./assets/javascripts/modal";
 
 console.log("index.js");
 
@@ -46,7 +47,7 @@ const createArticles = () => {
   ${article.content}
 </p>
 <div class="article-actions">
-  <button class="btn btn-delete" data-id=${article.id} >Delete</button>
+  <button class="btn btn-danger" data-id=${article.id} >Delete</button>
   <button class="btn btn-primary" data-id=${article.id} >Edit</button>
 </div>
 `;
@@ -54,7 +55,7 @@ const createArticles = () => {
     });
   articleContainerElement.innerHTML = "";
   articleContainerElement.append(...articlesDOM);
-  const deleteButtons = articleContainerElement.querySelectorAll(".btn-delete");
+  const deleteButtons = articleContainerElement.querySelectorAll(".btn-danger");
   const editButtons = articleContainerElement.querySelectorAll(".btn-primary");
   editButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
@@ -65,27 +66,30 @@ const createArticles = () => {
   });
   deleteButtons.forEach((button) => {
     button.addEventListener("click", async (event) => {
-      try {
-        const target = event.target;
-        const articleId = target.dataset.id;
-        const articleToDelete = new Object();
-        articleToDelete.id = articleId;
-        const json = JSON.stringify(articleToDelete);
-        const response = await fetch(
-          `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
-          {
-            method: "DELETE",
-            body: json,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const body = await response.json();
-        fetchArticle();
-      } catch (e) {
-        console.log("e: ", e);
-      }
+      openModal("Are you sure you want to delete your article?");
+      // if (result === true) {
+      //   try {
+      //     const target = event.target;
+      //     const articleId = target.dataset.id;
+      //     const articleToDelete = new Object();
+      //     articleToDelete.id = articleId;
+      //     const json = JSON.stringify(articleToDelete);
+      //     const response = await fetch(
+      //       `https://chr562igwa.execute-api.eu-central-1.amazonaws.com/dev`,
+      //       {
+      //         method: "DELETE",
+      //         body: json,
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //         },
+      //       }
+      //     );
+      //     const body = await response.json();
+      //     fetchArticle();
+      //   } catch (e) {
+      //     console.log("e: ", e);
+      //   }
+      // }
     });
   });
 };
