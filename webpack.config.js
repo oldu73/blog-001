@@ -9,6 +9,9 @@ module.exports = {
     form: path.join(__dirname, "src/form/form.js"),
     topbar: path.join(__dirname, "src/assets/javascripts/topbar.js"),
   },
+  optimization: {
+    runtimeChunk: "single",
+  },
   output: {
     path: path.join(__dirname, "dist"),
     filename: "[name].bundle.js",
@@ -32,7 +35,7 @@ module.exports = {
       patterns: [
         {
           from: "./src/assets/images/*",
-          to:path.resolve(__dirname, 'dist','assets/images', '[name][ext]'),
+          to: path.resolve(__dirname, "dist", "assets/images", "[name][ext]"),
         },
       ],
     }),
